@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -33,5 +34,20 @@ public class AccountController {
     public ResponseEntity<List<AccountDto>> getAllAcounts(){
         List<AccountDto> accounts =  accountService.getAccounts();
         return  ResponseEntity.ok(accounts);
+    }
+    @PutMapping("/{id}/deposit")
+    public ResponseEntity<AccountDto> deposit(@PathVariable Long id, @RequestBody Map<String,Double> request){
+       AccountDto accountDto = accountService.deposit(id,request.get("amount"));
+       return ResponseEntity.ok(accountDto);
+    }
+    @PutMapping("/{id}/withdraw")
+    public ResponseEntity<AccountDto> withdraw(@PathVariable Long id, @RequestBody Map<String,Double> request){
+        AccountDto accountDto = accountService.withdraw(id,request.get("amount"));
+        return ResponseEntity.ok(accountDto);
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteAccount(@PathVariable Long id){
+        String fullName = accountService.deleteAccount(id);
+        return  ResponseEntity.ok(fullName+" Account Deleted Successfully!");
     }
 }
